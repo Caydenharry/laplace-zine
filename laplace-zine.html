@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Laplace Transforms in CS & Engineering</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Bebas+Neue&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0d0d0d;
+    --paper: #f5f0e8;
+    --yellow: #f5e642;
+    --cyan: #00e5c8;
+    --red: #e63946;
+    --blue: #2b4fff;
+    --muted: #5a5347;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--ink); font-family: 'Space Mono', monospace; color: var(--paper); overflow-x: hidden; }
+
+  /* ── COVER ── */
+  .cover {
+    min-height: 100vh;
+    background: var(--ink);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-bottom: 4px solid var(--yellow);
+    position: relative;
+    overflow: hidden;
+  }
+  .cover-left {
+    padding: 60px 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border-right: 2px solid #222;
+  }
+  .issue-tag {
+    font-size: 11px;
+    letter-spacing: 4px;
+    color: var(--cyan);
+    text-transform: uppercase;
+    border: 1px solid var(--cyan);
+    display: inline-block;
+    padding: 4px 12px;
+    width: fit-content;
+  }
+  .cover-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(72px, 10vw, 130px);
+    line-height: 0.9;
+    letter-spacing: -2px;
+    color: var(--paper);
+  }
+  .cover-title span.accent { color: var(--yellow); display: block; }
+  .cover-subtitle {
+    font-size: 13px;
+    line-height: 1.8;
+    color: #aaa;
+    max-width: 340px;
+    border-left: 3px solid var(--yellow);
+    padding-left: 16px;
+  }
+  .cover-meta { font-size: 10px; letter-spacing: 3px; color: var(--muted); text-transform: uppercase; }
+  .cover-right {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 60px 40px;
+    background: #111;
+    position: relative;
+  }
+  .grid-bg {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+  }
+  .big-formula {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(20px, 3vw, 34px);
+    color: var(--yellow);
+    text-align: center;
+    line-height: 1.6;
+    padding: 30px;
+    border: 1px solid #333;
+    width: 100%;
+    max-width: 420px;
+    position: relative;
+    z-index: 1;
+  }
+  .big-formula::before {
+    content: 'LAPLACE TRANSFORM';
+    position: absolute;
+    top: -11px; left: 20px;
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 3px;
+    background: #111;
+    padding: 0 8px;
+    color: var(--cyan);
+  }
+  .stamp {
+    position: absolute;
+    border: 3px solid var(--red);
+    color: var(--red);
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    padding: 8px 14px;
+    transform: rotate(-12deg);
+    text-transform: uppercase;
+    opacity: 0.85;
+    z-index: 2;
+  }
+
+  /* ── APPLICATIONS ── */
+  .apps-section {
+    background: var(--paper);
+    color: var(--ink);
+    padding: 80px 40px;
+  }
+  .section-label { font-size: 10px; letter-spacing: 5px; text-transform: uppercase; color: var(--blue); margin-bottom: 12px; }
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(42px, 6vw, 80px);
+    line-height: 0.95;
+    color: var(--ink);
+    margin-bottom: 40px;
+  }
+  .apps-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2px;
+    background: var(--ink);
+    border: 2px solid var(--ink);
+  }
+  .app-card {
+    background: var(--paper);
+    padding: 36px 32px;
+    position: relative;
+    transition: background 0.15s;
+  }
+  .app-card:hover { background: #efe9d5; }
+  .app-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 72px;
+    color: #e0d8c4;
+    line-height: 1;
+    position: absolute;
+    top: 16px; right: 20px;
+  }
+  .app-icon { font-size: 26px; margin-bottom: 14px; }
+  .app-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    letter-spacing: 1px;
+    color: var(--ink);
+    margin-bottom: 10px;
+  }
+  .app-desc { font-size: 13px; line-height: 1.75; color: #444; }
+  .app-tag {
+    display: inline-block;
+    margin-top: 14px;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    background: var(--ink);
+    color: var(--yellow);
+    padding: 4px 10px;
+  }
+
+  /* ── CLOSING ── */
+  .closing {
+    min-height: 100vh;
+    background: var(--ink);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 80px 60px;
+    border-top: 4px solid var(--cyan);
+  }
+  .closing-top { max-width: 700px; }
+  .closing-eyebrow {
+    font-size: 11px;
+    letter-spacing: 5px;
+    color: var(--cyan);
+    text-transform: uppercase;
+    margin-bottom: 24px;
+  }
+  .closing-headline {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(52px, 8vw, 110px);
+    line-height: 0.92;
+    color: var(--paper);
+    margin-bottom: 36px;
+  }
+  .closing-headline span { color: var(--yellow); }
+  .closing-body {
+    font-size: 15px;
+    line-height: 1.85;
+    color: #aaa;
+    max-width: 560px;
+    border-left: 3px solid var(--cyan);
+    padding-left: 20px;
+  }
+  .closing-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 30px;
+    border-top: 1px solid #222;
+    padding-top: 40px;
+  }
+  .cite-block { font-size: 12px; line-height: 1.9; color: #555; max-width: 500px; }
+  .cite-block strong { color: #888; }
+  .cite-block a { color: var(--cyan); text-decoration: none; }
+  .zine-mark {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 38px;
+    color: #222;
+    line-height: 1;
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  @media (max-width: 700px) {
+    .cover { grid-template-columns: 1fr; }
+    .cover-right { display: none; }
+    .apps-grid { grid-template-columns: 1fr; }
+    .closing { padding: 60px 30px; }
+    .closing-bottom { flex-direction: column; align-items: flex-start; }
+    .zine-mark { text-align: left; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── COVER ── -->
+<section class="cover">
+  <div class="cover-left">
+    <div><div class="issue-tag">Zine By Cayden Harry</div></div>
+    <div>
+      <h1 class="cover-title">
+        Laplace
+        <span class="accent">Transforms</span>
+        in CS &amp; Engineering
+      </h1>
+    </div>
+    <div>
+      <p class="cover-subtitle">
+        I hate solving Laplace Transforms, luckily for me it's way more relevant to my major than I thought. Yippie!
+      </p>
+    </div>
+    <div><p class="cover-meta">Computer Science &amp; Engineering &nbsp;·&nbsp; Citing IEEE Access, 2023</p></div>
+  </div>
+  <div class="cover-right">
+    <div class="grid-bg"></div>
+    <div class="big-formula">
+      <div style="font-size:.7em;color:#aaa;margin-bottom:16px;font-family:'Space Mono',monospace;letter-spacing:2px;">DEFINITION</div>
+      ℒ{f(t)} = ∫<sub style="font-size:.6em">0</sub><sup style="font-size:.6em">∞</sup> e<sup style="font-size:.6em">−st</sup> f(t) dt
+      <div style="margin-top:20px;font-size:.63em;color:#aaa;font-family:'Space Mono',monospace;line-height:1.8;">
+        <span style="color:var(--cyan);">f(t)</span> = time domain function<br>
+        <span style="color:var(--cyan);">F(s)</span> = frequency domain result<br>
+        <span style="color:var(--cyan);">s</span> = complex frequency variable
+      </div>
+    </div>
+    <div class="stamp" style="bottom:80px;right:50px;">I Love Laplace! (I lied)</div>
+  </div>
+</section>
+
+<!-- ── 6 APPLICATIONS ── -->
+<section class="apps-section">
+  <div style="max-width:960px;margin:0 auto;">
+    <div class="section-label">Applications &nbsp;·&nbsp; Citing Chydzinski, IEEE Access 2023</div>
+    <h2 class="section-title">4 Places Laplace<br>Lives in CS &amp; Engineering</h2>
+    <div class="apps-grid">
+
+      <div class="app-card">
+        <div class="app-num">01</div>
+        <div class="app-icon">🌐</div>
+        <div class="app-title">Bufferbloat Prevention</div>
+        <p class="app-desc">Chydzinski's paper is directly motivated by bufferbloat, a well-known networking problem where routers hold too many packets, causing high latency and sluggish internet. The paper's probabilistic drop function d(n) is a mathematical solution to this, rejecting packets before the buffer gets dangerously full. Laplace analysis proves it works.</p>
+        <span class="app-tag">Network Engineering</span>
+      </div>
+
+      <div class="app-card">
+        <div class="app-num">02</div>
+        <div class="app-icon">📡</div>
+        <div class="app-title">Network Routers</div>
+        <p class="app-desc">Chydzinski's paper models Active Queue Management (AQM), the algorithm inside your router that decides which packets to drop before a buffer fills. Using Laplace Transforms, he mathematically proves how long packets wait under any traffic condition, including the bursty autocorrelated flows found in real internet traffic.</p>
+        <span class="app-tag">Computer Networks</span>
+      </div>
+
+      <div class="app-card">
+        <div class="app-num">03</div>
+        <div class="app-icon">📈</div>
+        <div class="app-title">System Stability Analysis</div>
+        <p class="app-desc">In networking, a system that takes too long to stabilize after startup can drop packets, spike latency, or behave unpredictably. Chydzinski's paper proves two theorems: one for transient behavior (how the system behaves right after startup) and one for stationary behavior (the long-run steady state). Laplace Transforms make this possible by letting the author take the limit as s approaches zero to extract the stationary solution directly from the same equation.</p>
+        <span class="app-tag">Systems Engineering</span>
+      </div>
+
+      <div class="app-card">
+        <div class="app-num">04</div>
+        <div class="app-icon">📊</div>
+        <div class="app-title">Traffic Autocorrelation Modeling</div>
+        <p class="app-desc">Real internet traffic is bursty and correlated, meaning heavy traffic tends to cluster together in a pattern. The paper uses a Markov-modulated Poisson process (wtf) to model this and shows via Laplace analysis that strong autocorrelation actually shortens wait times in AQM systems, because more packets get dropped, reducing the overall load.</p>
+        <span class="app-tag">Network Modeling</span>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── CLOSING ── -->
+<section class="closing">
+  <div class="closing-top">
+    <div class="closing-eyebrow">Closing</div>
+    <p class="closing-body">
+      Every application above shares one thing: a dynamic system too complex to solve head-on.
+      <span style="color:var(--yellow);">The Laplace Transform</span> is how engineers write down a clean answer at all, turning
+      unsolvable calculus into solvable algebra.
+    </p>
+  </div>
+
+  <div class="closing-bottom">
+    <div class="cite-block">
+      <strong>Primary Source</strong><br>
+      Chydzinski, A. (2023). Waiting Time in a General Active Queue Management Scheme.
+      <em>IEEE Access, 11</em>, 66535–66543.<br>
+      DOI: <a href="https://doi.org/10.1109/ACCESS.2023.3291392">10.1109/ACCESS.2023.3291392</a>
+    </div>
+    <div class="zine-mark">Laplace<br>Transforms<br>in CS &amp;<br>Engineering</div>
+  </div>
+</section>
+
+</body>
+</html>
